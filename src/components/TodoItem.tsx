@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 type Props = {
   todo: Todo;
-  onDelete: (id: number) => Promise<void>;
+  onDelete?: (id: number) => Promise<void>;
   isProcessed?: boolean;
   isLoading?: boolean;
   onToggle: (id: number) => void;
@@ -31,7 +31,10 @@ export const TodoItem: React.FC<Props> = ({
 
     if (!trimmedTitle) {
       try {
-        await onDelete(todo.id);
+        if (onDelete) {
+          await onDelete(todo.id);
+        }
+
         setIsEditing(false);
       } catch {}
 
@@ -48,6 +51,17 @@ export const TodoItem: React.FC<Props> = ({
       await handleUpdate({ ...todo, title: trimmedTitle });
       setIsEditing(false);
     } catch {}
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      setEditingTitle(todo.title);
+      setIsEditing(false);
+    }
+
+    if (e.key === 'Enter') {
+      handleSave();
+    }
   };
 
   return (
@@ -70,20 +84,12 @@ export const TodoItem: React.FC<Props> = ({
       {isEditing ? (
         <input
           data-cy="TodoTitleField"
+          className="todo__input"
           autoFocus
           value={editingTitle}
           onChange={e => setEditingTitle(e.target.value)}
           onBlur={handleSave}
-          onKeyUp={e => {
-            if (e.key === 'Escape') {
-              setEditingTitle(todo.title);
-              setIsEditing(false);
-            }
-
-            if (e.key === 'Enter') {
-              handleSave();
-            }
-          }}
+          onKeyUp={handleKeyUp}
         />
       ) : (
         <span
@@ -98,7 +104,7 @@ export const TodoItem: React.FC<Props> = ({
       {!isEditing && (
         <button
           type="button"
-          onClick={() => onDelete(todo.id)}
+          onClick={() => onDelete?.(todo.id)}
           className="todo__remove"
           data-cy="TodoDelete"
         >
@@ -109,7 +115,7 @@ export const TodoItem: React.FC<Props> = ({
       {isProcessed && (
         <div
           data-cy="TodoLoader"
-          className={`modal overlay ${isLoading ? 'is-active' : ''}`}
+          className={classNames('modal', 'overlay', { 'is-active': isLoading })}
         >
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />

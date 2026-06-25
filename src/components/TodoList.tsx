@@ -3,7 +3,7 @@ import { TodoItem } from './TodoItem';
 
 type Props = {
   todos: Todo[];
-  onDelete: (id: number) => Promise<void>;
+  onDelete?: (id: number) => Promise<void>;
   tempTodo: Todo | null;
   isLoading: boolean;
   deletingId: number | null;
@@ -38,7 +38,6 @@ export const TodoList: React.FC<Props> = ({
       {tempTodo && (
         <TodoItem
           todo={tempTodo}
-          onDelete={async () => {}}
           isLoading={isLoading}
           isProcessed
           handleUpdate={handleUpdate}
