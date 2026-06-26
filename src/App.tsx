@@ -14,6 +14,7 @@ import classNames from 'classnames';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { ErrorMessages } from './types/ErrorMessages';
+import { FilterTypes } from './types/Filter';
 
 export type FilterType = 'All' | 'Active' | 'Completed';
 
@@ -29,9 +30,9 @@ export const App: React.FC = () => {
 
   function getFilteredTodos(allTodos: Todo[], status: FilterType) {
     switch (status) {
-      case 'Active':
+      case FilterTypes.ACTIVE:
         return allTodos.filter(todo => !todo.completed);
-      case 'Completed':
+      case FilterTypes.COMPLETED:
         return allTodos.filter(todo => todo.completed);
       default:
         return allTodos;

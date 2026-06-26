@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { FilterType } from '../App';
+import { FilterTypes } from '../types/Filter';
 
 type Props = {
   filter: FilterType;
@@ -7,9 +8,9 @@ type Props = {
 };
 export const Filter: React.FC<Props> = ({ filter, setFilter }) => {
   const filters: { status: FilterType; label: string; href: string }[] = [
-    { status: 'All', label: 'All', href: '#/' },
-    { status: 'Active', label: 'Active', href: '#/active' },
-    { status: 'Completed', label: 'Completed', href: '#/completed' },
+    { status: FilterTypes.ALL, label: 'All', href: '#/' },
+    { status: FilterTypes.ACTIVE, label: 'Active', href: '#/active' },
+    { status: FilterTypes.COMPLETED, label: 'Completed', href: '#/completed' },
   ];
 
   return (
